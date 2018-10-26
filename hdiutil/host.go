@@ -12,14 +12,18 @@ import (
 // Any represent any data from a plist file
 type Any map[string]interface{}
 
+type DumpFunc func(p interface{})
+
 // Host allows communicating with hdiutil, and
 // handles logging, parsing, etc.
 type Host interface {
-	AsPlist(name string, args ...string) (Any, error)
+	SetDump(dump DumpFunc)
+	RunAndDecode(dst interface{}, name string, args ...string) error
 }
 
 type host struct {
 	consumer *state.Consumer
+	dump     DumpFunc
 }
 
 // NewHost configures and returns a new hdiutil host
@@ -29,21 +33,32 @@ func NewHost(consumer *state.Consumer) Host {
 	}
 }
 
-// AsPlist runs hdiutil and parses its output as a plist
-func (h *host) AsPlist(name string, args ...string) (Any, error) {
-	output, err := h.run(name, args...)
+func (h *host) SetDump(dump DumpFunc) {
+	h.dump = dump
+}
 
-	result := make(Any)
-	_, err = plist.Unmarshal(output, &result)
+func (h *host) RunAndDecode(dst interface{}, name string, args ...string) error {
+	output, err := h.run(name, args...)
 	if err != nil {
-		return nil, errors.WithStack(err)
+		return errors.WithStack(err)
 	}
 
-	return result, nil
+	if h.dump != nil {
+		result := make(Any)
+		_, err = plist.Unmarshal(output, &result)
+		h.dump(result)
+	}
+
+	_, err = plist.Unmarshal(output, dst)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	return nil
 }
 
 func (h *host) run(subcmd string, args ...string) ([]byte, error) {
-	h.consumer.Debugf("hdiutil ::: %s", strings.Join(args, " ::: "))
+	h.consumer.Debugf("hdiutil ::: %s ::: %s", subcmd, strings.Join(args, " ::: "))
 
 	hdiArgs := []string{subcmd}
 	hdiArgs = append(hdiArgs, args...)

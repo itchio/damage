@@ -6,16 +6,26 @@ import (
 	"github.com/pkg/errors"
 )
 
+type Info struct {
+	Format            string      `plist:"Format"`
+	FormatDescription string      `plist:"Format Description"`
+	Partitions        []Partition `plist:"partitions"`
+}
+
+type Partition struct {
+	Hint        string                 `plist:"partition-hint"`
+	Name        string                 `plist:"partition-name"`
+	Length      int64                  `plist:"partition-length"`
+	Filesystems map[string]interface{} `plist:"partition-filesystems"`
+}
+
 func Info(host hdiutil.Host, dmgpath string) error {
-	l, err := host.AsPlist(
-		"imageinfo",
-		"-plist",
-		dmgpath,
-	)
+	var info Info
+	err = host.RunAndDecode(&info, "imageinfo", "-plist", dmgpath)
 	if err != nil {
 		return errors.WithStack(err)
 	}
+	spew.Dump(info)
 
-	spew.Dump(l)
 	return nil
 }

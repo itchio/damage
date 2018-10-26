@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/davecgh/go-spew/spew"
 	"github.com/itchio/damage"
 	"github.com/itchio/damage/hdiutil"
 	"github.com/itchio/wharf/state"
@@ -36,6 +37,7 @@ func main() {
 		},
 	}
 	host = hdiutil.NewHost(consumer)
+	host.SetDump(spew.Dump)
 
 	args := os.Args[1:]
 	cmd, err := app.Parse(args)
