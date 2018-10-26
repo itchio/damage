@@ -87,7 +87,7 @@ func (di *DiskInfo) String() string {
 			fsNames = append(fsNames, fsName)
 		}
 
-		lines = append(lines, fmt.Sprintf("Filesystem:\t%s",
+		lines = append(lines, fmt.Sprintf("FS:\t%s",
 			strings.Join(fsNames, "-"),
 		))
 	}
