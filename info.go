@@ -7,9 +7,25 @@ import (
 )
 
 type DiskInfo struct {
-	Format            string     `plist:"Format"`
-	FormatDescription string     `plist:"Format Description"`
-	Partitions        Partitions `plist:"partitions"`
+	Format            string              `plist:"Format"`
+	FormatDescription string              `plist:"Format Description"`
+	Partitions        Partitions          `plist:"partitions"`
+	Properties        DiskProperties      `plist:"Properties"`
+	SizeInformation   DiskSizeInformation `plist:"Size Information"`
+}
+
+type DiskSizeInformation struct {
+	CompressedBytes int64 `plist:"Compressed Bytes"`
+	TotalBytes      int64 `plist:"Total Bytes"`
+}
+
+type DiskProperties struct {
+	// true if has EULA
+	SoftwareLicenseAgreement bool `plist:"Software License Agreement"`
+	// true if is compressed
+	Checksummed bool `plist:"Checksummed"`
+	// true if includes checksums
+	Compressed bool `plist:"Compressed"`
 }
 
 type Partitions struct {
