@@ -27,6 +27,8 @@ var (
 )
 
 func main() {
+	log.SetFlags(0)
+
 	app.UsageTemplate(kingpin.CompactUsageTemplate)
 
 	app.HelpFlag.Short('h')
@@ -36,6 +38,9 @@ func main() {
 
 	consumer = &state.Consumer{
 		OnMessage: func(lvl string, msg string) {
+			if lvl == "debug" && !*verbose {
+				return
+			}
 			log.Printf("[%s] %s", lvl, msg)
 		},
 	}
@@ -67,7 +72,6 @@ func main() {
 func info() {
 	file := *infoFile
 
-	log.Printf("Analyzing (%s)", file)
 	info, err := damage.GetDiskInfo(host, file)
 	must(err)
 
