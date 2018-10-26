@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/itchio/damage"
@@ -78,7 +79,7 @@ func info() {
 	if *infoLong {
 		jsonDump(info)
 	} else {
-		log.Printf("%s", info)
+		log.Printf("%s: %s", filepath.Base(file), info)
 	}
 }
 

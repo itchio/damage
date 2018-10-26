@@ -69,7 +69,7 @@ func (di *DiskInfo) String() string {
 		summary += " [eula]"
 	}
 	lines = append(lines, summary)
-	lines = append(lines, fmt.Sprintf("(%s)", di.FormatDescription))
+	lines = append(lines, fmt.Sprintf("Format: %s", di.FormatDescription))
 
 	size := fmt.Sprintf("%s compressed, %s decompressed",
 		progress.FormatBytes(di.SizeInformation.CompressedBytes),
@@ -87,9 +87,8 @@ func (di *DiskInfo) String() string {
 			fsNames = append(fsNames, fsName)
 		}
 
-		lines = append(lines, fmt.Sprintf("⤳ %s filesystem (%s)",
+		lines = append(lines, fmt.Sprintf("Filesystem: %s",
 			strings.Join(fsNames, "-"),
-			progress.FormatBytes(p.Length),
 		))
 	}
 
