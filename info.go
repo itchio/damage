@@ -1,7 +1,9 @@
 package damage
 
 import (
-	"github.com/davecgh/go-spew/spew"
+	"encoding/json"
+	"log"
+
 	"github.com/itchio/damage/hdiutil"
 	"github.com/pkg/errors"
 )
@@ -47,7 +49,14 @@ func GetInfo(host hdiutil.Host, dmgpath string) error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	spew.Dump(info)
+	// spew.Dump(info)
+
+	out, err := json.MarshalIndent(info, "", "  ")
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	log.Printf("Info:\n%s", string(out))
 
 	return nil
 }
