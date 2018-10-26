@@ -19,9 +19,9 @@ type Partition struct {
 	Filesystems map[string]interface{} `plist:"partition-filesystems"`
 }
 
-func Info(host hdiutil.Host, dmgpath string) error {
+func GetInfo(host hdiutil.Host, dmgpath string) error {
 	var info Info
-	err = host.RunAndDecode(&info, "imageinfo", "-plist", dmgpath)
+	err := host.RunAndDecode(&info, "imageinfo", "-plist", dmgpath)
 	if err != nil {
 		return errors.WithStack(err)
 	}

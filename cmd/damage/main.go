@@ -61,7 +61,7 @@ func info() {
 	file := *infoFile
 
 	log.Printf("Analyzing (%s)", file)
-	must(damage.Info(host, file))
+	must(damage.GetInfo(host, file))
 }
 
 func must(err error) {
