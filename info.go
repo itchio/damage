@@ -23,12 +23,12 @@ type DiskSizeInformation struct {
 
 type DiskProperties struct {
 	// true if has EULA
-	SoftwareLicenseAgreement bool `plist:"Software License Agreement" json:"omitempty"`
+	SoftwareLicenseAgreement bool `plist:"Software License Agreement" json:",omitempty"`
 	// true if is compressed
-	Checksummed bool `plist:"Checksummed" json:"omitempty"`
+	Checksummed bool `plist:"Checksummed" json:",omitempty"`
 	// true if includes checksums
-	Compressed bool `plist:"Compressed" json:"omitempty"`
-	Encrypted  bool `plist:"Encrypted" json:"omitempty"`
+	Compressed bool `plist:"Compressed" json:",omitempty"`
+	Encrypted  bool `plist:"Encrypted" json:",omitempty"`
 }
 
 type Partitions struct {
@@ -36,11 +36,11 @@ type Partitions struct {
 }
 
 type Partition struct {
-	Hint        string                 `plist:"partition-hint" json:"omitempty"`
+	Hint        string                 `plist:"partition-hint" json:",omitempty"`
 	Name        string                 `plist:"partition-name"`
 	Length      int64                  `plist:"partition-length"`
-	Synthesized bool                   `plist:"synthesized" json:"omitempty"`
-	Filesystems map[string]interface{} `plist:"partition-filesystems" json:"omitempty"`
+	Synthesized bool                   `plist:"synthesized" json:",omitempty"`
+	Filesystems map[string]interface{} `plist:"partition-filesystems" json:",omitempty"`
 }
 
 func GetInfo(host hdiutil.Host, dmgpath string) error {
