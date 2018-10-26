@@ -26,6 +26,7 @@ type DiskProperties struct {
 	Checksummed bool `plist:"Checksummed"`
 	// true if includes checksums
 	Compressed bool `plist:"Compressed"`
+	Encrypted  bool `plist:"Encrypted"`
 }
 
 type Partitions struct {
@@ -36,6 +37,7 @@ type Partition struct {
 	Hint        string                 `plist:"partition-hint"`
 	Name        string                 `plist:"partition-name"`
 	Length      int64                  `plist:"partition-length"`
+	Synthesized bool                   `plist:"synthesized"`
 	Filesystems map[string]interface{} `plist:"partition-filesystems"`
 }
 
