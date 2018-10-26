@@ -1,10 +1,11 @@
 package damage
 
 import (
-	"encoding/json"
-	"log"
+	"fmt"
+	"strings"
 
 	"github.com/itchio/damage/hdiutil"
+	"github.com/itchio/httpkit/progress"
 	"github.com/pkg/errors"
 )
 
@@ -32,7 +33,7 @@ type DiskProperties struct {
 }
 
 type Partitions struct {
-	Partition []Partition `plist:"partitions"`
+	Partitions []Partition `plist:"partitions"`
 }
 
 type Partition struct {
@@ -43,20 +44,54 @@ type Partition struct {
 	Filesystems map[string]interface{} `plist:"partition-filesystems" json:",omitempty"`
 }
 
-func GetInfo(host hdiutil.Host, dmgpath string) error {
+func GetDiskInfo(host hdiutil.Host, dmgpath string) (*DiskInfo, error) {
 	var info DiskInfo
 	err := host.RunAndDecode(&info, "imageinfo", "-plist", dmgpath)
 	if err != nil {
-		return errors.WithStack(err)
+		return nil, errors.WithStack(err)
 	}
-	// spew.Dump(info)
+	return &info, nil
+}
 
-	out, err := json.MarshalIndent(info, "", "  ")
-	if err != nil {
-		return errors.WithStack(err)
+func (di *DiskInfo) String() string {
+	var lines []string
+	summary := fmt.Sprintf("%s image", di.Format)
+	if di.Properties.Checksummed {
+		summary += " [checksum]"
+	}
+	if di.Properties.Compressed {
+		summary += " [compress]"
+	}
+	if di.Properties.Encrypted {
+		summary += " [encrypt]"
+	}
+	if di.Properties.SoftwareLicenseAgreement {
+		summary += " [eula]"
+	}
+	lines = append(lines, summary)
+	lines = append(lines, fmt.Sprintf("(%s)", di.FormatDescription))
+
+	size := fmt.Sprintf("%s compressed, %s decompressed",
+		progress.FormatBytes(di.SizeInformation.CompressedBytes),
+		progress.FormatBytes(di.SizeInformation.TotalBytes),
+	)
+	lines = append(lines, size)
+
+	for _, p := range di.Partitions.Partitions {
+		fs := p.Filesystems
+		if len(fs) == 0 {
+			continue
+		}
+		var fsNames []string
+		for fsName := range fs {
+			fsNames = append(fsNames, fsName)
+		}
+
+		lines = append(lines, fmt.Sprintf("⤳ %s filesystem (%s)",
+			strings.Join(fsNames, "-"),
+			progress.FormatBytes(p.Length),
+		))
 	}
 
-	log.Printf("Info:\n%s", string(out))
-
-	return nil
+	return strings.Join(lines, "\n")
 }

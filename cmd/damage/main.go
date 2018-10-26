@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -19,6 +20,7 @@ var (
 
 	infoCmd  = app.Command("info", "Print information about a DMG file")
 	infoFile = infoCmd.Arg("file", "The .dmg file to analyze").ExistingFile()
+	infoLong = infoCmd.Flag("long", "Show all info").Bool()
 
 	consumer *state.Consumer
 	host     hdiutil.Host
@@ -66,7 +68,21 @@ func info() {
 	file := *infoFile
 
 	log.Printf("Analyzing (%s)", file)
-	must(damage.GetInfo(host, file))
+	info, err := damage.GetDiskInfo(host, file)
+	must(err)
+
+	if *infoLong {
+		jsonDump(info)
+	} else {
+		log.Printf("%s", info)
+	}
+}
+
+func jsonDump(v interface{}) {
+	out, err := json.MarshalIndent(v, "", "  ")
+	must(err)
+
+	log.Print(string(out))
 }
 
 func must(err error) {
