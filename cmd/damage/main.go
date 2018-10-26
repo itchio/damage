@@ -14,7 +14,8 @@ import (
 )
 
 var (
-	app = kingpin.New("damage", "Your devilish little DMG helper")
+	app     = kingpin.New("damage", "Your devilish little DMG helper")
+	verbose = app.Flag("verbose", "Enable verbose output").Short('v').Bool()
 
 	infoCmd  = app.Command("info", "Print information about a DMG file")
 	infoFile = infoCmd.Arg("file", "The .dmg file to analyze").ExistingFile()
@@ -37,7 +38,9 @@ func main() {
 		},
 	}
 	host = hdiutil.NewHost(consumer)
-	host.SetDump(spew.Dump)
+	if *verbose {
+		host.SetDump(spew.Dump)
+	}
 
 	args := os.Args[1:]
 	cmd, err := app.Parse(args)
