@@ -1,8 +1,7 @@
 package damage
 
 import (
-	"log"
-
+	"github.com/davecgh/go-spew/spew"
 	"github.com/itchio/damage/hdiutil"
 	"github.com/pkg/errors"
 )
@@ -17,6 +16,6 @@ func Info(host hdiutil.Host, dmgpath string) error {
 		return errors.WithStack(err)
 	}
 
-	log.Printf("plist: %#v", l)
+	spew.Dump(l)
 	return nil
 }
