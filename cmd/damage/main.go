@@ -39,6 +39,7 @@ func main() {
 	}
 	host = hdiutil.NewHost(consumer)
 	if *verbose {
+		log.Printf("Running in verbose mode")
 		host.SetDump(spew.Dump)
 	}
 
