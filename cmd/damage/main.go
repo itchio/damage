@@ -37,11 +37,6 @@ func main() {
 			log.Printf("[%s] %s", lvl, msg)
 		},
 	}
-	host = hdiutil.NewHost(consumer)
-	if *verbose {
-		log.Printf("Running in verbose mode")
-		host.SetDump(spew.Dump)
-	}
 
 	args := os.Args[1:]
 	cmd, err := app.Parse(args)
@@ -52,6 +47,12 @@ func main() {
 		} else {
 			app.FatalUsage("%s\n", err.Error())
 		}
+	}
+
+	host = hdiutil.NewHost(consumer)
+	if *verbose {
+		log.Printf("Running in verbose mode")
+		host.SetDump(spew.Dump)
 	}
 
 	fullCmd := kingpin.MustParse(cmd, err)
