@@ -12,7 +12,7 @@ import (
 // Any represent any data from a plist file
 type Any map[string]interface{}
 
-type DumpFunc func(p interface{})
+type DumpFunc func(p ...interface{})
 
 // Host allows communicating with hdiutil, and
 // handles logging, parsing, etc.
