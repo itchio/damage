@@ -110,6 +110,10 @@ func (h *host) run(input string, subcmd string, args ...string) ([]byte, error) 
 	hdiArgs := []string{subcmd}
 	hdiArgs = append(hdiArgs, args...)
 	cmd := exec.Command("hdiutil", hdiArgs...)
+	if input != "" {
+		cmd.Stdin = strings.NewReader(input)
+	}
+
 	output, err := cmd.Output()
 	if err != nil {
 		return nil, err
