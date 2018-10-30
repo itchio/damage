@@ -121,6 +121,7 @@ func sla() {
 
 	if !info.Properties.SoftwareLicenseAgreement {
 		log.Printf("%s: no SLA", file)
+		return
 	}
 
 	rez, err := damage.GetUDIFResources(host, file)
