@@ -29,6 +29,10 @@ var (
 	infoFile = infoCmd.Arg("file", "The .dmg file to analyze").ExistingFile()
 	infoLong = infoCmd.Flag("long", "Show all info").Bool()
 
+	mountCmd  = app.Command("mount", "Mount a DMG file to a local folder (ignoring the EULA)")
+	mountFile = infoCmd.Arg("file", "The .dmg file to mount").ExistingFile()
+	mountDir  = infoCmd.Flag("dir", "Where to mount the dmg").ExistingDir()
+
 	consumer *state.Consumer
 	host     hdiutil.Host
 )
@@ -78,6 +82,8 @@ func main() {
 		derez()
 	case slaCmd.FullCommand():
 		sla()
+	case mountCmd.FullCommand():
+		mount()
 	}
 }
 
@@ -143,6 +149,14 @@ func sla() {
 		}
 		log.Printf("%s", line)
 	}
+}
+
+func mount() {
+	file := *mountFile
+	dir := *mountDir
+
+	_, err := damage.Mount(host, file, dir)
+	must(err)
 }
 
 func jsonDump(v interface{}) {

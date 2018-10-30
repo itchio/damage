@@ -52,7 +52,7 @@ func (res UDIFResource) StringData() string {
 
 func GetUDIFResources(host hdiutil.Host, dmgpath string) (*UDIFResources, error) {
 	var rez UDIFResources
-	err := host.RunAndDecode(&rez, "udifderez", "-xml", dmgpath)
+	err := host.Command("udifderez").WithArgs("-xml", dmgpath).RunAndDecode(&rez)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}

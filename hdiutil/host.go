@@ -18,7 +18,7 @@ type DumpFunc func(p ...interface{})
 // handles logging, parsing, etc.
 type Host interface {
 	SetDump(dump DumpFunc)
-	RunAndDecode(dst interface{}, name string, args ...string) error
+	Command(name string) CommandBuilder
 }
 
 type host struct {
@@ -37,8 +37,40 @@ func (h *host) SetDump(dump DumpFunc) {
 	h.dump = dump
 }
 
-func (h *host) RunAndDecode(dst interface{}, name string, args ...string) error {
-	output, err := h.run(name, args...)
+type CommandBuilder interface {
+	WithArgs(args ...string) CommandBuilder
+	WithInput(input string) CommandBuilder
+	RunAndDecode(dst interface{}) error
+}
+
+type commandBuilder struct {
+	host  *host
+	name  string
+	args  []string
+	input string
+}
+
+func (h *host) Command(name string) CommandBuilder {
+	return &commandBuilder{
+		host: h,
+		name: name,
+	}
+}
+
+func (cb *commandBuilder) WithArgs(args ...string) CommandBuilder {
+	cb.args = args
+	return cb
+}
+
+func (cb *commandBuilder) WithInput(input string) CommandBuilder {
+	cb.input = input
+	return cb
+}
+
+func (cb *commandBuilder) RunAndDecode(dst interface{}) error {
+	h := cb.host
+
+	output, err := h.run(cb.input, cb.name, cb.args...)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -57,7 +89,7 @@ func (h *host) RunAndDecode(dst interface{}, name string, args ...string) error 
 	return nil
 }
 
-func (h *host) run(subcmd string, args ...string) ([]byte, error) {
+func (h *host) run(input string, subcmd string, args ...string) ([]byte, error) {
 	h.consumer.Debugf("hdiutil ::: %s ::: %s", subcmd, strings.Join(args, " ::: "))
 
 	hdiArgs := []string{subcmd}

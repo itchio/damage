@@ -46,7 +46,7 @@ type Partition struct {
 
 func GetDiskInfo(host hdiutil.Host, dmgpath string) (*DiskInfo, error) {
 	var info DiskInfo
-	err := host.RunAndDecode(&info, "imageinfo", "-plist", dmgpath)
+	err := host.Command("imageinfo").WithArgs("-plist", dmgpath).RunAndDecode(&info)
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
