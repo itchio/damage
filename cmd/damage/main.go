@@ -18,6 +18,9 @@ var (
 	app     = kingpin.New("damage", "Your devilish little DMG helper")
 	verbose = app.Flag("verbose", "Enable verbose output").Short('v').Bool()
 
+	slaCmd  = app.Command("sla", "Show SLA (software license agreement) for dmg")
+	slaFile = slaCmd.Arg("file", "The .dmg file to print the SLA for").ExistingFile()
+
 	derezCmd  = app.Command("derez", "Print resources from a DMG file")
 	derezFile = derezCmd.Arg("file", "The .dmg file to print resources from").ExistingFile()
 
@@ -71,6 +74,8 @@ func main() {
 		info()
 	case derezCmd.FullCommand():
 		derez()
+	case slaCmd.FullCommand():
+		sla()
 	}
 }
 
@@ -106,6 +111,26 @@ func derez() {
 		log.Printf("%s", rez)
 		log.Printf("============================")
 	}
+}
+
+func sla() {
+	file := *slaFile
+
+	info, err := damage.GetDiskInfo(host, file)
+	must(err)
+
+	if !info.Properties.SoftwareLicenseAgreement {
+		log.Printf("%s: no SLA", file)
+	}
+
+	rez, err := damage.GetUDIFResources(host, file)
+	must(err)
+
+	sla, err := damage.GetDefaultSLA(rez)
+	must(err)
+
+	log.Printf("%s: %s SLA", file, sla.Language)
+	log.Printf("%s", sla.Text)
 }
 
 func jsonDump(v interface{}) {
