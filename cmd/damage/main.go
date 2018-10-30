@@ -35,6 +35,7 @@ var (
 
 func main() {
 	log.SetFlags(0)
+	log.SetOutput(os.Stdout)
 
 	app.UsageTemplate(kingpin.CompactUsageTemplate)
 
