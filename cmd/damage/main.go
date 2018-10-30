@@ -133,6 +133,15 @@ func sla() {
 
 	log.Printf("%s: %s SLA", file, sla.Language)
 	text := strings.Replace(sla.Text, "\r", "\n", -1)
+	lines := strings.Split(text, "\n")
+	maxColumns := 80
+	for _, line := range lines {
+		for len(line) > maxColumns {
+			log.Printf("%s", line[:maxColumns])
+			line = line[maxColumns:]
+		}
+		log.Printf("%s", line)
+	}
 	log.Printf("%s", text)
 }
 
