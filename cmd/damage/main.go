@@ -177,7 +177,7 @@ func unmount() {
 	err := damage.Unmount(host, dir)
 	must(err)
 
-	log.Printf("%s: unmounted")
+	log.Printf("%s: unmounted", dir)
 }
 
 func jsonDump(v interface{}) {
