@@ -23,7 +23,7 @@ type DiskSizeInformation struct {
 }
 
 type DiskProperties struct {
-	// true if has EULA
+	// true if has a software license agreement
 	SoftwareLicenseAgreement bool `plist:"Software License Agreement" json:",omitempty"`
 	// true if is compressed
 	Checksummed bool `plist:"Checksummed" json:",omitempty"`
@@ -66,7 +66,7 @@ func (di *DiskInfo) String() string {
 		summary += " [encrypt]"
 	}
 	if di.Properties.SoftwareLicenseAgreement {
-		summary += " [eula]"
+		summary += " [sla]"
 	}
 	lines = append(lines, summary)
 	lines = append(lines, fmt.Sprintf("Format:\t%s", di.FormatDescription))

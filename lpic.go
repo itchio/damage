@@ -12,7 +12,7 @@ import (
 // LPic resource - where languages are listed for an SLA.
 const LPicResourceID int64 = 5000
 
-// LPic is the decoded version of UDIF's langauge information for SLAs.
+// LPic is the decoded version of UDIF's language information for SLAs.
 type LPic struct {
 	Missing         bool
 	DefaultLanguage Language

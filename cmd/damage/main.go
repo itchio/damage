@@ -29,7 +29,7 @@ var (
 	infoFile = infoCmd.Arg("file", "The .dmg file to analyze").ExistingFile()
 	infoLong = infoCmd.Flag("long", "Show all info").Bool()
 
-	mountCmd  = app.Command("mount", "Mount a DMG file to a local folder (ignoring the EULA)")
+	mountCmd  = app.Command("mount", "Mount a DMG file to a local folder (ignoring the SLA)")
 	mountFile = mountCmd.Arg("file", "The .dmg file to mount").ExistingFile()
 	mountDir  = mountCmd.Flag("dir", "Where to mount the dmg").Short('d').ExistingDir()
 
