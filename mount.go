@@ -5,9 +5,22 @@ import (
 	"github.com/pkg/errors"
 )
 
+type MountResult struct {
+	SystemEntities []SystemEntity `plist:"system-entities"`
+}
+
+type SystemEntity struct {
+	MountPoint           string `plist:"mount-point"`
+	PotentiallyMountable bool   `plist:"potentially-mountable"`
+	UnmappedContentHint  string `plist:"unmapped-content-hint"`
+	VolumeKind           string `plist:"volume-kind"`
+	ContentHint          string `plist:"content-hint"`
+	DevEntry             string `plist:"dev-entry"`
+}
+
 // Mount a dmg file into a directory
-func Mount(host hdiutil.Host, dmgpath string, dir string) (hdiutil.Any, error) {
-	res := make(hdiutil.Any)
+func Mount(host hdiutil.Host, dmgpath string, dir string) (*MountResult, error) {
+	var res MountResult
 	err := host.Command("attach").WithArgs(
 		"-plist",             // output format
 		"-nobrowse",          // don't show in Finder
@@ -24,7 +37,7 @@ func Mount(host hdiutil.Host, dmgpath string, dir string) (hdiutil.Any, error) {
 	if err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return res, err
+	return &res, err
 }
 
 func Unmount(host hdiutil.Host, dir string) error {

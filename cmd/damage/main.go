@@ -160,10 +160,15 @@ func mount() {
 	file := *mountFile
 	dir := *mountDir
 
-	_, err := damage.Mount(host, file, dir)
+	res, err := damage.Mount(host, file, dir)
 	must(err)
 
-	log.Printf("%s: mounted at %s", file, dir)
+	log.Printf("%s: mounted", file)
+	for _, entity := range res.SystemEntities {
+		if entity.MountPoint != "" {
+			log.Printf("%s: %s (%s) (%s)", entity.MountPoint, entity.VolumeKind, entity.ContentHint, entity.DevEntry)
+		}
+	}
 }
 
 func unmount() {
