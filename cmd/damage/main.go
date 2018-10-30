@@ -18,6 +18,9 @@ var (
 	app     = kingpin.New("damage", "Your devilish little DMG helper")
 	verbose = app.Flag("verbose", "Enable verbose output").Short('v').Bool()
 
+	derezCmd  = app.Command("derez", "Print resources from a DMG file")
+	derezFile = derezCmd.Arg("file", "The .dmg file to print resources from").ExistingFile()
+
 	infoCmd  = app.Command("info", "Print information about a DMG file")
 	infoFile = infoCmd.Arg("file", "The .dmg file to analyze").ExistingFile()
 	infoLong = infoCmd.Flag("long", "Show all info").Bool()
@@ -66,6 +69,8 @@ func main() {
 	switch fullCmd {
 	case infoCmd.FullCommand():
 		info()
+	case derezCmd.FullCommand():
+		derez()
 	}
 }
 
@@ -82,6 +87,23 @@ func info() {
 		log.Printf("%s", file)
 		log.Printf("----------------------------")
 		log.Printf("%s", info)
+		log.Printf("============================")
+	}
+}
+
+func derez() {
+	file := *derezFile
+
+	rez, err := damage.GetUDIFResources(host, file)
+	must(err)
+
+	if *infoLong {
+		jsonDump(info)
+	} else {
+		log.Printf("============================")
+		log.Printf("%s", file)
+		log.Printf("----------------------------")
+		log.Printf("%s", rez)
 		log.Printf("============================")
 	}
 }
