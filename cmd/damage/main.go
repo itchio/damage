@@ -33,6 +33,9 @@ var (
 	mountFile = mountCmd.Arg("file", "The .dmg file to mount").ExistingFile()
 	mountDir  = mountCmd.Flag("dir", "Where to mount the dmg").Short('d').ExistingDir()
 
+	unmountCmd = app.Command("unmount", "Unmount a DMG file mounted to a local folder")
+	unmountDir = unmountCmd.Arg("file", "The directory to unmount").ExistingDir()
+
 	consumer *state.Consumer
 	host     hdiutil.Host
 )
@@ -84,6 +87,8 @@ func main() {
 		sla()
 	case mountCmd.FullCommand():
 		mount()
+	case unmountCmd.FullCommand():
+		unmount()
 	}
 }
 
@@ -157,6 +162,17 @@ func mount() {
 
 	_, err := damage.Mount(host, file, dir)
 	must(err)
+
+	log.Printf("%s: mounted at %s", file, dir)
+}
+
+func unmount() {
+	dir := *unmountDir
+
+	err := damage.Unmount(host, dir)
+	must(err)
+
+	log.Printf("%s: unmounted")
 }
 
 func jsonDump(v interface{}) {

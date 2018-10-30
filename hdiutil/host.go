@@ -41,6 +41,7 @@ type CommandBuilder interface {
 	WithArgs(args ...string) CommandBuilder
 	WithInput(input string) CommandBuilder
 	RunAndDecode(dst interface{}) error
+	Run() error
 }
 
 type commandBuilder struct {
@@ -65,6 +66,20 @@ func (cb *commandBuilder) WithArgs(args ...string) CommandBuilder {
 func (cb *commandBuilder) WithInput(input string) CommandBuilder {
 	cb.input = input
 	return cb
+}
+
+func (cb *commandBuilder) Run() error {
+	h := cb.host
+
+	output, err := h.run(cb.input, cb.name, cb.args...)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	if h.dump != nil {
+		h.dump(output)
+	}
+	return nil
 }
 
 func (cb *commandBuilder) RunAndDecode(dst interface{}) error {
