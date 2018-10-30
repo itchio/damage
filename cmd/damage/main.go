@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/itchio/damage"
@@ -131,7 +132,8 @@ func sla() {
 	must(err)
 
 	log.Printf("%s: %s SLA", file, sla.Language)
-	log.Printf("%s", sla.Text)
+	text := strings.Replace(sla.Text, "\r", "\n", -1)
+	log.Printf("%s", text)
 }
 
 func jsonDump(v interface{}) {
