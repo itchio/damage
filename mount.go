@@ -19,7 +19,7 @@ func Mount(host hdiutil.Host, dmgpath string, dir string) (hdiutil.Any, error) {
 		"-readonly", // we won't ever write to it
 		"-noidme",   // some kind of scripting, disable
 		dmgpath,
-	).WithInput("y\n").RunAndDecode(&res)
+	).WithInput("Y").RunAndDecode(&res)
 
 	if err != nil {
 		return nil, errors.WithStack(err)
