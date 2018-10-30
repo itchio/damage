@@ -30,8 +30,8 @@ var (
 	infoLong = infoCmd.Flag("long", "Show all info").Bool()
 
 	mountCmd  = app.Command("mount", "Mount a DMG file to a local folder (ignoring the EULA)")
-	mountFile = infoCmd.Arg("file", "The .dmg file to mount").ExistingFile()
-	mountDir  = infoCmd.Flag("dir", "Where to mount the dmg").ExistingDir()
+	mountFile = mountCmd.Arg("file", "The .dmg file to mount").ExistingFile()
+	mountDir  = mountCmd.Flag("dir", "Where to mount the dmg").ExistingDir()
 
 	consumer *state.Consumer
 	host     hdiutil.Host
