@@ -119,11 +119,5 @@ func (h *host) run(input string, subcmd string, args ...string) ([]byte, error) 
 		return nil, err
 	}
 
-	result := make(Any)
-	_, err = plist.Unmarshal(output, &result)
-	if err != nil {
-		return nil, errors.WithMessagef(err, "While running hdiutil.%s", subcmd)
-	}
-
 	return output, nil
 }
