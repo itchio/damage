@@ -142,7 +142,6 @@ func sla() {
 		}
 		log.Printf("%s", line)
 	}
-	log.Printf("%s", text)
 }
 
 func jsonDump(v interface{}) {
