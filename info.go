@@ -18,8 +18,9 @@ type DiskInfo struct {
 }
 
 type DiskSizeInformation struct {
-	CompressedBytes int64 `plist:"Compressed Bytes"`
-	TotalBytes      int64 `plist:"Total Bytes"`
+	CompressedBytes    int64 `plist:"Compressed Bytes"`
+	TotalBytes         int64 `plist:"Total Bytes"`
+	TotalNonEmptyBytes int64 `plist:"Total Non-Empty Bytes"`
 }
 
 type DiskProperties struct {
@@ -73,7 +74,7 @@ func (di *DiskInfo) String() string {
 
 	size := fmt.Sprintf("Size:\t%s compressed, %s decompressed",
 		progress.FormatBytes(di.SizeInformation.CompressedBytes),
-		progress.FormatBytes(di.SizeInformation.TotalBytes),
+		progress.FormatBytes(di.SizeInformation.TotalNonEmptyBytes),
 	)
 	lines = append(lines, size)
 
