@@ -4,8 +4,8 @@ import (
 	"os/exec"
 	"strings"
 
-	plist "github.com/DHowett/go-plist"
-	"github.com/itchio/wharf/state"
+	"howett.net/plist"
+	"github.com/itchio/headway/state"
 	"github.com/pkg/errors"
 )
 

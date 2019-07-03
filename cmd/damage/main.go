@@ -10,7 +10,7 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/itchio/damage"
 	"github.com/itchio/damage/hdiutil"
-	"github.com/itchio/wharf/state"
+	"github.com/itchio/headway/state"
 
 	"gopkg.in/alecthomas/kingpin.v2"
 )

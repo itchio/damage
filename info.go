@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/itchio/damage/hdiutil"
-	"github.com/itchio/httpkit/progress"
+	"github.com/itchio/headway/united"
 	"github.com/pkg/errors"
 )
 
@@ -73,8 +73,8 @@ func (di *DiskInfo) String() string {
 	lines = append(lines, fmt.Sprintf("Format:\t%s", di.FormatDescription))
 
 	size := fmt.Sprintf("Size:\t%s compressed, %s decompressed",
-		progress.FormatBytes(di.SizeInformation.CompressedBytes),
-		progress.FormatBytes(di.SizeInformation.TotalNonEmptyBytes),
+		united.FormatBytes(di.SizeInformation.CompressedBytes),
+		united.FormatBytes(di.SizeInformation.TotalNonEmptyBytes),
 	)
 	lines = append(lines, size)
 
