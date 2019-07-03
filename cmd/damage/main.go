@@ -121,7 +121,7 @@ func derez() {
 		log.Printf("============================")
 		log.Printf("%s", file)
 		log.Printf("----------------------------")
-		log.Printf("%s", rez)
+		log.Printf("%v", rez)
 		log.Printf("============================")
 	}
 }
